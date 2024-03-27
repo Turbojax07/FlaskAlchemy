@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{# The title of the page. #}
+{% block title %}
+Edit
+{% endblock %}
+
+{# Block for content to put into the head of a page. #}
+{% block head %}
+<script>
+function edit(id) {
+    let nameInput = document.getElementById("name");
+    let colorInput = document.getElementById("color");
+    let ageInput = document.getElementById("age");
+
+    body = {
+        "name": nameInput.value,
+        "color": colorInput.value,
+        "age": ageInput.value
+    }
+
+    fetch(window.location.href, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+    }).then(resp => {
+        if (resp.redirected) window.location.href = resp.url;
+    });
+}
+</script>
+{% endblock %}
+
+{# Block for content to put into the body of a page. #}
+{% block content %}
+    <table cellspacing="0px" border="1px">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Color</td>
+                <td>Age</td>
+            </tr>
+        </thead>
+        <tbody id="catTable">
+            <tr>
+                <td>{{ cat.id }}</td>
+                <td><input type="text" value="{{ cat.name }}" id="name"></td>
+                <td><input type="text" value="{{ cat.color }}" id="color"></td>
+                <td><input type="text" value="{{ cat.age }}" id="age"></td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="button" value="Submit" onclick="edit({{ cat.id }})">
+{% endblock %}

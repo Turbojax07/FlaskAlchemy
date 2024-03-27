@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{# The title of the page. #}
+{% block title %}
+Index
+{% endblock %}
+
+{# Block for content to put into the head of a page. #}
+{% block head %}
+<script>
+function remove(id) {
+    fetch(window.location.href + `delete/${id}`, {
+        method: "POST"
+    }).then(resp => {
+        if (resp.redirected) window.location.href = resp.url;
+    });
+}
+</script>
+{% endblock %}
+
+{# Block for content to put into the body of a page. #}
+{% block content %}
+    <input type="button" value="Create" onclick="window.location.href += 'create'">
+    <table border="1px" cellspacing="0px">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Color</td>
+                <td>Age</td>
+                <td>Edit</td>
+                <td>Delete</td>
+            </tr>
+        </thead>
+        <tbody id="catTable">
+            {% for cat in cats %}
+                <tr>
+                    <td>{{ cat.id }}</td>
+                    <td>{{ cat.name }}</td>
+                    <td>{{ cat.color }}</td>
+                    <td>{{ cat.age }}</td>
+                    <td><input type="button" value="Edit" onclick="window.location.href += 'edit/{{ cat.id }}'"></td>
+                    <td><input type="button" value="Delete" onclick="remove({{ cat.id }})"></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
